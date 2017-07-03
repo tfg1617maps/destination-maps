@@ -1,0 +1,201 @@
+extends ../layout
+block extraHeader
+  script(type='text/javascript', src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDgrScUf5b4KL3hqBzkhluD31kOg-y6ug4')
+  script(type='text/javascript', src='/javascripts/map.js')
+  link(href='/stylesheets/map.css', rel='stylesheet', type='text/css', media='all')
+block content
+  .container-fluid
+    include  ../templates/nav
+    .row
+      .col-md-3   
+      .col-md-6
+        if error != undefined
+          .alert.alert-danger.alert-dismissible(role='alert')
+            p= error
+        if info != undefined
+          .alert.alert-success.alert-dismissible(role='alert')
+            button.close(type='button', data-dismiss='alert', aria-label='Close')
+              span(aria-hidden='true') ×
+            p= info
+        if ListPoi != undefined
+          form#get-address(role="form" action='#' method='post')
+          .form-group#address-group
+            label.control-label.white-element(for="address") Indique la dirección o selececione el POI en el mapa:
+              span.required-element &nbsp;*
+            input#address.form-control(type="text", name='address', required="true", aria-describedby='helpBlockAddress')
+            #map-canvas
+          .form-actions
+            button.btn.btn-primary(onclick='searchAddress();') Obtener latitud y longitud
+          form#create-poi(role="form" action='http://tfg1617maps.zapto.org:8080/editar', method='post', enctype='multipart/form-data')
+            .form-group                  
+              input#nombre-mapa.form-control.hide-element(type="text", readonly='', name='nombre_mapa', value= nombre_mapa)
+            .form-group                  
+              input#id-mapa.form-control.hide-element(type="text", readonly='', name='id_mapa', value= ListPoi[0].id_mapa)
+            .form-group                  
+              input#id-poi.form-control.hide-element(type="text", readonly='', name='id_poi', value= ListPoi[0].idPOI)
+            .form-group#titulo-group
+              label.control-label.white-element(for="titulo") Título:
+                span.required-element &nbsp;*
+              input#titulo.form-control(type="text", name='titulo', required="true", value= ListPoi[0].titulo, aria-describedby='helpBlockTitulo')
+              span#helpBlockTitulo.help-block(style="display: none;")
+            .form-group#latitud-group
+              label.control-label.white-element(for="latitud") Latitud:
+                span.required-element &nbsp;*
+              input#latitud.form-control(type="text", name='latitud', required="true", value= ListPoi[0].latitud, aria-describedby='helpBlockLatitud')
+              span#helpBlockLatitud.help-block(style="display: none;")
+            .form-group#longitud-group
+              label.control-label.white-element(for="longitud") Longitud:
+                span.required-element &nbsp;*
+              input#longitud.form-control(type="text", name='longitud', required="true", value= ListPoi[0].longitud, aria-describedby='helpBlockLongitud')
+              span#helpBlockLongitud.help-block(style="display: none;")
+            .form-group#completeAddress-group
+              label.control-label.white-element(for="completeAddress") Dirección:
+                span.required-element &nbsp;*
+              input#completeAddress.form-control(type="text", name='direccion', required="true", value= ListPoi[0].direccion, aria-describedby='helpBlockCompleteAddress' readonly='')
+              span#helpBlockCompleteAddress.help-block(style="display: none;")
+            .form-group
+              label.white-element(for="categoria") Categoría:
+                span.required-element &nbsp;*
+              select.selectpicker#categoria.form-control(name="categoria")
+                option(value="Acuario", selected= ("Acuario"==ListPoi[0].categoria) ? 'selected' : null) Acuario
+                option(value="Ayuntamiento", selected= ("Ayuntamiento"==ListPoi[0].categoria) ? 'selected' : null) Ayuntamiento
+                option(value="Bar", selected= ("Bar"==ListPoi[0].categoria) ? 'selected' : null) Bar
+                option(value="Biblioteca", selected= ("Biblioteca"==ListPoi[0].categoria) ? 'selected' : null) Biblioteca
+                option(value="Cafeteria", selected= ("Cafeteria"==ListPoi[0].categoria) ? 'selected' : null) Cafeteria
+                option(value="Catedral", selected= ("Catedral"==ListPoi[0].categoria) ? 'selected' : null) Catedral
+                option(value="Convento", selected= ("Convento"==ListPoi[0].categoria) ? 'selected' : null) Convento
+                option(value="Escultura", selected= ("Escultura"==ListPoi[0].categoria) ? 'selected' : null) Escultura
+                option(value="Estacion", selected= (""==ListPoi[0].categoria) ? 'selected' : null) Estacion
+                option(value="Iglesia", selected= ("Iglesia"==ListPoi[0].categoria) ? 'selected' : null) Iglesia
+                option(value="Mercado", selected= ("Mercado"==ListPoi[0].categoria) ? 'selected' : null) Mercado
+                option(value="Monumento", selected= ("Monumento"==ListPoi[0].categoria) ? 'selected' : null) Monumento
+                option(value="Museo", selected= ("Museo"==ListPoi[0].categoria) ? 'selected' : null) Museo
+                option(value="Parque", selected= ("Parque"==ListPoi[0].categoria) ? 'selected' : null) Parque
+                option(value="Playa", selected= ("Playa"==ListPoi[0].categoria) ? 'selected' : null) Playa
+                option(value="Teatro", selected= ("Teatro"==ListPoi[0].categoria) ? 'selected' : null) Teatro
+                option(value="Universidad", selected= ("Universidad"==ListPoi[0].categoria) ? 'selected' : null) Universidad
+                option(value="Zoo", selected= ("Zoo"==ListPoi[0].categoria) ? 'selected' : null) Zoo
+            .form-group#descripcion-group
+              label.control-label.white-element(for="descripcion") Descripción:
+                span.required-element &nbsp;*
+              textarea#descripcion.form-control(rows="5", name='descripcion', required="true", aria-describedby='helpBlockDescripcion')= ListPoi[0].descripcion
+              span#helpBlockDescripcion.help-block(style="display: none;")
+            .form-group
+              label.white-element(for="enlace") Enlace:
+              input#enlace.form-control(type="text", name='enlace', value= ListPoi[0].enlace)
+            .form-group#ar-group
+              label.control-label.white-element(for="arselect") Experiencia realidad aumentada: 
+                span.required-element &nbsp;*
+              .radio
+                label.white-element
+                  input(type='radio', name='optradio', value='si' checked= ("si"==ListPoi[0].contenido) ? 'selected' : null)
+                  | Si
+                .radio
+                  label.white-element
+                    input(type='radio', name='optradio', value='no' checked= ("no"==ListPoi[0].contenido) ? 'selected' : null)
+                    | No
+              span#helpBlockAr.help-block(style="display: none;")
+            #arexperience.hide-element
+              .form-group#distancia-group
+                label.control-label.white-element(for="distancia") Distancia maxiama para visualizar la realidad aumentada en kilometros:
+                  span.required-element &nbsp;*
+                input#distancia.form-control(type="text", name='distancia', required='true', value= ListPoi[0].distancia, aria-describedby='helpBlockDistancia')
+                span#helpBlockDistancia.help-block(style="display: none;")
+              h3 Elemento realidad aumentada 1
+                span.required-element &nbsp;*
+              .form-group#arelement1-group
+                label.control-label.white-element(for="optradio_element1") Tipo de archivo: 
+                  span.required-element &nbsp;*&nbsp;
+                  label.radio-inline
+                    input(type='radio', name='optradio_element1', value='imagen' checked= ("imagen"==ListPoi[0].elemento1) ? 'selected' : null)
+                    | Imagen
+                  label.radio-inline
+                    input(type='radio', name='optradio_element1', value='video' checked= ("video"==ListPoi[0].elemento1) ? 'selected' : null)
+                    | Video
+                span#helpBlockArelement1.help-block(style="display: none;")
+              .form-group#filearelement1-group
+                label.control-label.white-element(for="filetoupload1") Archivo realidad aumentada:
+                  span.required-element &nbsp;*
+                .form-group                  
+                  input#old-file1.form-control.hide-element(type="text", readonly='', name='old_file1', value= ListPoi[0].archivo1)
+                p Archivo actual: 
+                  span(style="color:white") #{ListPoi[0].archivo1}
+                input#file1.filestyle(type="file", name="filetoupload1", data-buttonname="btn-primary", data-icon="false")
+                span#helpBlockArfile1.help-block(style="display: none;")
+              #transparentelement1.hide-element
+                .form-group#transparent1-group
+                  input(type='checkbox', name='transparent1', value='yes' checked= ("yes"==ListPoi[0].transparent1) ? 'selected' : null)
+                  | &nbsp;
+                  label.control-label.white-element(for="transparent1") Video transparente
+              .form-group#tamanio1-group
+                label.control-label.white-element(for="tamanio1") Tamaño  en %:
+                  span.required-element &nbsp;*
+                input#tamanio1.form-control(type="text", name='tamanio1', required='true', value= ListPoi[0].tamanio1, aria-describedby='helpBlockTamanio1')
+                span#helpBlockTamanio1.help-block(style="display: none;")
+                
+              h3 Elemento realidad aumentada 2
+              .form-group#arelement2-group
+                label.control-label.white-element(for="optradio_element2") Tipo de archivo: 
+                  span.required-element &nbsp;*&nbsp;
+                  label.radio-inline
+                    input(type='radio', name='optradio_element2', value='imagen' checked= ("imagen"==ListPoi[0].elemento2) ? 'selected' : null)
+                    | Imagen
+                  label.radio-inline
+                    input(type='radio', name='optradio_element2', value='video' checked= ("video"==ListPoi[0].elemento2) ? 'selected' : null)
+                    | Video
+                span#helpBlockArelement2.help-block(style="display: none;")
+              .form-group#filearelement2-group
+                label.control-label.white-element(for="filetoupload2") Archivo realidad aumentada:
+                  span.required-element &nbsp;*
+                .form-group                  
+                  input#old-file2.form-control.hide-element(type="text", readonly='', name='old_file2', value= ListPoi[0].archivo2)
+                p Archivo actual: 
+                  span(style="color:white") #{ListPoi[0].archivo2}  
+                input#file2.filestyle(type="file", name="filetoupload2", data-buttonname="btn-primary", data-icon="false")
+                span#helpBlockArfile2.help-block(style="display: none;")
+              #transparentelement2.hide-element
+                .form-group#transparent2-group
+                  input(type='checkbox', name='transparent2', value='yes' checked= ("yes"==ListPoi[0].transparent2) ? 'selected' : null)
+                  | &nbsp;
+                  label.control-label.white-element(for="transparent2") Video transparente
+              .form-group#tamanio2-group
+                label.control-label.white-element(for="tamanio2") Tamaño  en %:
+                  span.required-element &nbsp;*
+                input#tamanio2.form-control(type="text", name='tamanio2', required='true', value= ListPoi[0].tamanio2, aria-describedby='helpBlockTamanio2')
+                span#helpBlockTamanio2.help-block(style="display: none;")
+              h3 Elemento realidad aumentada 3
+              .form-group#arelement3-group
+                label.control-label.white-element(for="optradio_element3") Tipo de archivo: 
+                  span.required-element &nbsp;*&nbsp;
+                  label.radio-inline
+                    input(type='radio', name='optradio_element3', value='imagen' checked= ("imagen"==ListPoi[0].elemento3) ? 'selected' : null)
+                    | Imagen
+                  label.radio-inline
+                    input(type='radio', name='optradio_element3', value='video' checked= ("video"==ListPoi[0].elemento3) ? 'selected' : null)
+                    | Video
+                span#helpBlockArelement3.help-block(style="display: none;")
+              .form-group#filearelement3-group
+                label.control-label.white-element(for="filetoupload3") Archivo realidad aumentada:
+                  span.required-element &nbsp;*
+                .form-group                  
+                  input#old-file3.form-control.hide-element(type="text", readonly='', name='old_file3', value= ListPoi[0].archivo1)
+                p Archivo actual: 
+                  span(style="color:white") #{ListPoi[0].archivo1}
+                input#file3.filestyle(type="file", name="filetoupload3", data-buttonname="btn-primary", data-icon="false")
+                span#helpBlockArfile3.help-block(style="display: none;")
+              #transparentelement3.hide-element
+                .form-group#transparent3-group
+                  input(type='checkbox', name='transparent3', value='yes' checked= ("yes"==ListPoi[0].transparent3) ? 'selected' : null)
+                  | &nbsp;
+                  label.control-label.white-element(for="transparent3") Video transparente
+              .form-group#tamanio3-group
+                label.control-label.white-element(for="tamanio3") Tamaño  en %:
+                  span.required-element &nbsp;*
+                input#tamanio3.form-control(type="text", name='tamanio3', required='true', value= ListPoi[0].tamanio3, aria-describedby='helpBlockTamanio3')
+                span#helpBlockTamanio3.help-block(style="display: none;")    
+            .form-actions
+              button.btn.btn-primary(type="submit",id='btn-modificarPOI') MODIFICAR POI
+            div.final-separation
+      .col-md-3
+      script(src='/javascripts/validate.js')  
+      script(src='/javascripts/poi-functions.js')

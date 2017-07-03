@@ -1,0 +1,63 @@
+extends ../layout
+
+block content
+  .container-fluid
+    include  ../templates/nav
+    .row
+      .col-md-1
+      .col-md-10
+        h3.text-center
+          b Lista de Mapas Almacenados
+        .alert.alert-danger.alert.alert-dismissable(id='message-error', style="display: none;")
+          button.close(type='button', data-dismiss='alert', aria-label='Close')
+            span(aria-hidden='true') ×
+          strong Imposible acceder a la BBDD para borrar el mapa, pruebe de nuevo en unos instantes
+        .alert.alert-warning.alert.alert-dismissable(id='message', style="display: none;")
+          a.close(href='http://tfg1617maps.zapto.org:8080/nuevomapa', data-dismiss='alert', aria-label='close') ×
+          strong No hay mapas almacenados en la base de datos. 
+            a.alert-link(href="http://tfg1617maps.zapto.org:8080/nuevomapa") Crea el primer mapa.
+        if error != undefined
+          .alert.alert-danger
+            strong= error
+        else    
+          if ListMapas == 0
+            .alert.alert-warning(role='alert')
+              a.close(href='http://tfg1617maps.zapto.org:8080/nuevomapa', data-dismiss='alert', aria-label='close') ×
+              if nombre_mapa != undefined
+                strong No existen mapas con el nombre indicado: #{nombre_mapa}.
+              else
+                strong No hay mapas almacenados en la base de datos. 
+                  a.alert-link(href="http://tfg1617maps.zapto.org:8080/nuevomapa") Crea el primer mapa.       
+          else
+            .table-responsive
+              table.table.table-bordered.text-center(id='tbl-mapas')
+                thead.table-header
+                  tr
+                    th.text-center
+                      | Icono Mapa
+                    th.text-center
+                      | Nombre Mapa
+                    th.text-center
+                      | Fecha Creación
+                    th.text-center
+                      | Acciones Mapa
+                tbody.table-element
+                  each mapas in ListMapas
+                    tr
+                      td.hide-element(id='id_mapa') #{mapas.id_mapa}
+                      td.hide-element(id='latitud') #{mapas.latitud}
+                      td.hide-element(id='longitud') #{mapas.longitud}
+                      if(mapas.icono != undefined)
+                        td
+                          img(src='images/icon-maps/'+ mapas.icono +'.png')       
+                      td(id='nombre_mapa') #{mapas.nombre}
+                      td #{mapas.fecha_creacion}
+                      td
+                        button.btn.btn-primary(id='btn-anadirPOI', type='button', aria-label='Left Align', data-toggle='tooltip', title='añadir POI')
+                          span.glyphicon.glyphicon-plus
+                        button.btn.btn-primary.action-button(id='btn-verPOIs', type='button', aria-label='Left Align', data-toggle='tooltip', title='ver POIS')
+                          span.glyphicon.glyphicon-eye-open
+                        button.btn.btn-primary(id='btn-eliminar', type='button', aria-label='Left Align', data-toggle='tooltip', title='eliminar mapa')
+                          span.glyphicon.glyphicon-trash
+      .col-md-1
+  script(src='/javascripts/maps-functions.js')

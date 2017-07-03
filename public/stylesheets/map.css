@@ -1,0 +1,9 @@
+#map-canvas {
+   margin: 1% 0 1% 0;
+   padding: 0;
+   height: 400px;
+   max-width: none;
+}
+#map-canvas img {
+   max-width: none !important;
+}

@@ -1,0 +1,58 @@
+extends ../layout
+block extraHeader
+  script(type='text/javascript', src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDgrScUf5b4KL3hqBzkhluD31kOg-y6ug4')
+block content
+  .container-fluid
+    include  ../templates/nav
+    .row
+      .col-md-4
+      .col-md-4
+        img.createmap-image.center-block(src="images/map-icon.png", alt="mapa")
+      .col-md-4
+    .row
+      .col-md-4
+      .col-md-4
+        if error != undefined
+          .alert.alert-danger
+            button.close(type='button', data-dismiss='alert', aria-label='Close')
+              span(aria-hidden='true') ×
+            strong= error
+        if info != undefined
+          .alert.alert-success.alert-dismissible(role='alert')
+            button.close(type='button', data-dismiss='alert', aria-label='Close')
+              span(aria-hidden='true') ×
+            p= info
+        form#create-map(role="form" action='http://tfg1617maps.zapto.org:8080/crearmapa' method='post')
+          .form-group#name-group
+            label.control-label.white-element(for="map-name") Nombre del mapa:           
+            input#map-name.form-control(type="text", name="nombre", required="true", aria-describedby='helpBlockname')
+            span#helpBlockname.help-block(style="display: none;")
+          .form-group#country-group
+            label.control-label.white-element(for="map-country") Pais del mapa:           
+            input#map-country.form-control(type="text", name="pais", required="true", aria-describedby='helpBlockcountry')
+            span#helpBlockcountry.help-block(style="display: none;")  
+          label.white-element(for='map-icon') Icono del mapa:
+          .form-group
+            select.selectpicker(name="icono", data-width="100%", id="map-icon")
+              option(value="icon1" data-content="<img src='images/icon-maps/icon1.png'/>")
+              option(value="icon2" data-content="<img src='images/icon-maps/icon2.png'/>")
+              option(value="icon3" data-content="<img src='images/icon-maps/icon3.png'/>")
+              option(value="icon4" data-content="<img src='images/icon-maps/icon4.png'/>")
+              option(value="icon5" data-content="<img src='images/icon-maps/icon5.png'/>")
+              option(value="icon6" data-content="<img src='images/icon-maps/icon6.png'/>")
+              option(value="icon7" data-content="<img src='images/icon-maps/icon7.png'/>")
+              option(value="icon8" data-content="<img src='images/icon-maps/icon8.png'/>")
+              option(value="icon9" data-content="<img src='images/icon-maps/icon9.png'/>")
+              option(value="icon10" data-content="<img src='images/icon-maps/icon10.png'/>")
+              option(value="icon11" data-content="<img src='images/icon-maps/icon11.png'/>")
+              option(value="icon12" data-content="<img src='images/icon-maps/icon12.png'/>")
+          .form-group
+            input#latitud.form-control.hide-element(type="text", name="latitud")
+          .form-group
+            input#longitud.form-control.hide-element(type="text", name="longitud")
+          .form-actions
+            button.btn.btn-primary(type="submit",id='btn-crearMapa') CREAR MAPA
+      .col-md-4
+    script(src='/javascripts/validate.js')
+    script(src='/javascripts/maps-functions.js')
+    

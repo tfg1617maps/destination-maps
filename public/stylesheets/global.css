@@ -1,0 +1,84 @@
+.has-error .control-label{
+    color: #8A0808;
+}
+.has-error .form-control{
+  border-color:#8A0808;
+}
+.has-error .help-block {
+    color: #8A0808;
+}
+#background
+{
+  background-color: #607B7D;
+}
+.form-actions {
+    margin: 0;
+    background-color: transparent;
+    text-align: center;
+}
+.row{
+  margin-right: 0px;
+  margin-left: 0px;
+}
+.alert{
+  margin-top: 5%;
+  margin-bottom: 5%;
+}
+/*index*/
+.img-index{
+  width: 100%;
+  height: 100%;
+}
+.text-index{
+  color:white;
+  margin-top:2%;
+}
+/*crear mapa css*/
+.createmap-image{
+  width: 100px;
+  height:100px;
+}
+.final-separation{
+  height:20px;
+}
+/*nav element css*/
+.nav-image{
+  width: 25px;
+  height:25px;
+}
+.nav-search{
+  margin-left: 10px;
+}
+/*css para las tablas*/
+h3{
+  color:white;
+  margin-bottom: 2%;
+}
+.hide-element{
+  display: none;
+}
+.table-header{
+  color: white;
+}
+.table-element{
+  color: white;
+  vertical-align: middle;
+}
+.description-text{
+  text-wrap: normal;
+  word-wrap: break-word;
+}
+.action-button{
+  margin-left: 5%;
+  margin-right: 5%;
+}
+.table-bordered {
+   text-align: center;
+}
+.white-element{
+  color: #fff;
+  font-weight: bold;
+}
+.required-element{
+  color: #8A0808;
+}

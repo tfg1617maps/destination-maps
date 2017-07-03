@@ -1,0 +1,62 @@
+extends ../layout
+
+block content
+  .container-fluid
+    include  ../templates/nav
+    
+    .row
+      .col-md-1
+      .col-md-10
+        h3.text-center Listado de POI de #{nombre_mapa}
+        p.hide-element(id="nombre_mapa")= nombre_mapa
+        if error != undefined
+          .alert.alert-danger.alert-dismissible(role='alert')
+            p= error
+        .alert.alert-danger.alert.alert-dismissable(id='message-error', style="display: none;")
+          button.close(type='button', data-dismiss='alert', aria-label='Close')
+            span(aria-hidden='true') ×
+          strong Imposible acceder a la BBDD para borrar el POI, pruebe de nuevo en unos instantes
+        .alert.alert-warning.alert.alert-dismissable(id='message', style="display: none;")
+          a.close(href='http://tfg1617maps.zapto.org:8080/mapas', data-dismiss='alert', aria-label='close') ×
+          strong No hay POIS almacenados para este mapa en la base de datos.
+            a.alert-link(href="javascript:openPage(#{id_mapa},#{latitud},#{longitud})") Crea el primer POI del mapa.
+        if Listpois != undefined
+          if Listpois == 0
+            .alert.alert-warning.alert-dismissible(role='alert')
+              a.close(href='http://tfg1617maps.zapto.org:8080/mapas', data-dismiss='alert', aria-label='close') ×
+              strong no hay puntos de interes para el mapa seleccionado.
+                a.alert-link(href="javascript:openPage(#{id_mapa},#{latitud},#{longitud})") Crea un POI para el mapa.
+          else
+            .table-responsive
+              table.table.table-bordered.text-center.table-responsive(id='tbl-pois')
+                thead
+                  tr
+                    th.text-center.hide-element
+                      | id poi
+                    th.text-center
+                      | Título
+                    th.text-center
+                      | Categoria
+                    th.text-center
+                      | Descripción
+                    th.text-center
+                      | Experiencia
+                      br
+                      |  Aumentada
+                    th.text-center
+                      | Acciones POI 
+                tbody
+                  each poi in Listpois
+                    tr
+                      td.table-element-center.hide-element(id='id_poi')= poi.idPOI
+                      td.table-element-center= poi.titulo  
+                      td.table-element-center= poi.categoria
+                      td.table-element-center.description-text= poi.descripcion
+                      td.table-element-center= poi.contenido
+                      td(style='width: 150px;')
+                        button.btn.btn-primary(id='btn-editarPOI', type='button', aria-label='Left Align', data-toggle='tooltip', title='editar POI')
+                          span.glyphicon.glyphicon-pencil
+                        button.btn.btn-primary.action-button(id='btn-borrarPOI', type='button', aria-label='Left Align', data-toggle='tooltip', title='borrar POI')
+                          span.glyphicon.glyphicon-trash
+      .col-md-1
+  script(src='/javascripts/poi-functions.js')    

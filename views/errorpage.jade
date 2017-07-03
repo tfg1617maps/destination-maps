@@ -1,0 +1,18 @@
+
+extends layout
+block extraHeader
+  link(href='/stylesheets/error.css', rel='stylesheet', type='text/css', media='all')
+block content
+  include  templates/nav
+  .wrap
+    .content
+      img(src='images/error-img.png', title='error')
+      p
+        span
+          label Ohh..... &nbsp;
+        | La pagina que has solicitado no existe.
+      a(href='http://tfg1617maps.zapto.org:8080/') Volver a inicio
+      .copy-right
+        p
+          | &#169 All rights Reserved | Designed by 
+          a(href='http://w3layouts.com/') W3Layouts

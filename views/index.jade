@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  .container-fluid
+    include  templates/nav
+    .row
+      .col-md-4
+      .col-md-4
+        a(href="http://tfg1617maps.zapto.org:8080/nuevomapa")
+          img.img-index(src="images/webtitle.png", alt="titulo de pagina web")
+      .col-md-4
+    .row
+      .col-md-2
+      .col-md-8
+        p.text-index Desde este servidor usted podrá crear de manera rápida y sencilla sus propios mapas.
+          | Una vez definido el mapa el siguiente paso es añadir los puntos de interés (POI) que formaran
+          | y darán contenido a su mapa, en cada POI podrá añadirle un título, una categoría que será la encargada
+          | de asignarle un icono en el mapa, una localización para ser dibujado en el mapa, una breve descripción
+          | para conocer los principales datos del POI, también se le puede añadir un enlace para complementar la
+          | información de interés del POI. El último paso para finalizar el mapa es la posibilidad de añadir una
+          | experiencia aumentada a nuestro POI, mediante la inclusión de una imagen o un video.
+          br
+          br
+          | Posteriormente estos mapas pueden ser descargados en la aplicación móvil y de esta manera poder usarlos
+          | como guía disfrutando de todas la información necesaria y experimentar la realidad aumentada añadida en
+          | los POI. 
+      .col-md-2
