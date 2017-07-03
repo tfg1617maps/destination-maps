@@ -17,13 +17,13 @@ block content
             span(aria-hidden='true') ×
           strong Imposible acceder a la BBDD para borrar el POI, pruebe de nuevo en unos instantes
         .alert.alert-warning.alert.alert-dismissable(id='message', style="display: none;")
-          a.close(href='http://tfg1617maps.zapto.org:8080/mapas', data-dismiss='alert', aria-label='close') ×
+          a.close(href='https://tfgmaps-1617.herokuapp.com/mapas', data-dismiss='alert', aria-label='close') ×
           strong No hay POIS almacenados para este mapa en la base de datos.
             a.alert-link(href="javascript:openPage(#{id_mapa},#{latitud},#{longitud})") Crea el primer POI del mapa.
         if Listpois != undefined
           if Listpois == 0
             .alert.alert-warning.alert-dismissible(role='alert')
-              a.close(href='http://tfg1617maps.zapto.org:8080/mapas', data-dismiss='alert', aria-label='close') ×
+              a.close(href='https://tfgmaps-1617.herokuapp.com/mapas', data-dismiss='alert', aria-label='close') ×
               strong no hay puntos de interes para el mapa seleccionado.
                 a.alert-link(href="javascript:openPage(#{id_mapa},#{latitud},#{longitud})") Crea un POI para el mapa.
           else

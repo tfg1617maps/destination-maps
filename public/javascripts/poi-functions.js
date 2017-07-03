@@ -21,7 +21,7 @@ $('#tbl-pois #btn-borrarPOI').click(function(e){
       if(result)
       {
         $.ajax({
-          url:'http://tfg1617maps.zapto.org:8080/eliminarpoi',
+          url:'https://tfgmaps-1617.herokuapp.com/eliminarpoi',
           method: 'post',
           data : {id : id},
           success : function(res){
@@ -50,7 +50,7 @@ $('#tbl-pois #btn-editarPOI').click(function(e){
   var id= elemento.parent().parent().find('#id_poi').text();
   var nombre=document.getElementById("nombre_mapa").innerHTML;
   console.log('el valor del id es: ' + id);
-  location.href = 'http://tfg1617maps.zapto.org:8080/modificarpoi?id=' + id +'&nombre='+nombre;
+  location.href = 'https://tfgmaps-1617.herokuapp.com/modificarpoi?id=' + id +'&nombre='+nombre;
 });
 /*validar el los campos de crear el poi antes de enviarlos al servidor*/
 $('#btn-crearPOI').click(function(e){
@@ -70,5 +70,5 @@ $('#btn-modificarPOI').click(function(e){
 /*Funcion que se encarga de redirigir a crear un nuevo POI de un mapa dado
 en caso de no disponer de POIs*/
 openPage = function(id, latitud, longitud) {
-  location.href = "http://tfg1617maps.zapto.org:8080/anadirPOI?id="+id+"&latitud="+latitud+"&longitud="+longitud;
+  location.href = "https://tfgmaps-1617.herokuapp.com/anadirPOI?id="+id+"&latitud="+latitud+"&longitud="+longitud;
 }

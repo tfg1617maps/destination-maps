@@ -13,9 +13,9 @@ block content
             span(aria-hidden='true') ×
           strong Imposible acceder a la BBDD para borrar el mapa, pruebe de nuevo en unos instantes
         .alert.alert-warning.alert.alert-dismissable(id='message', style="display: none;")
-          a.close(href='http://tfg1617maps.zapto.org:8080/nuevomapa', data-dismiss='alert', aria-label='close') ×
+          a.close(href='https://tfgmaps-1617.herokuapp.com/nuevomapa', data-dismiss='alert', aria-label='close') ×
           strong No hay mapas almacenados en la base de datos. 
-            a.alert-link(href="http://tfg1617maps.zapto.org:8080/nuevomapa") Crea el primer mapa.
+            a.alert-link(href="https://tfgmaps-1617.herokuapp.com/nuevomapa") Crea el primer mapa.
         if error != undefined
           .alert.alert-danger
             strong= error
