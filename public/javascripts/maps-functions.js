@@ -56,7 +56,7 @@ $('#tbl-mapas #btn-eliminar').click(function(e){
       if(result)
       {
         $.ajax({
-          url:'https://tfgmaps-1617.herokuapp.com/eliminarmapa',
+          url:'http://tfg1617maps.zapto.org:8080/eliminarmapa',
           method: 'post',
           data : {id : id},
           success : function(res){
@@ -86,7 +86,7 @@ $('#tbl-mapas #btn-anadirPOI').click(function(e){
   var id= elemento.parent().parent().find('#id_mapa').text();
   var latitud = elemento.parent().parent().find('#latitud').text();
   var longitud = elemento.parent().parent().find('#longitud').text();
-  location.href = 'https://tfgmaps-1617.herokuapp.com/anadirPOI?id=' + id +'&latitud=' + latitud + '&longitud=' + longitud;
+  location.href = 'http://tfg1617maps.zapto.org:8080/anadirPOI?id=' + id +'&latitud=' + latitud + '&longitud=' + longitud;
 });
 
 /*Función que se encarga de gestionar el boton de ver los POIs de un mapa en el
@@ -98,5 +98,5 @@ $('#tbl-mapas #btn-verPOIs').click(function(e){
   var nombre= elemento.parent().parent().find('#nombre_mapa').text();
   var latitud= elemento.parent().parent().find('#latitud').text();
   var longitud= elemento.parent().parent().find('#longitud').text();
-  location.href = 'https://tfgmaps-1617.herokuapp.com/verPOI?id=' + id +'&nombre=' + nombre +'&latitud=' + latitud + '&longitud=' + longitud;
+  location.href = 'http://tfg1617maps.zapto.org:8080/verPOI?id=' + id +'&nombre=' + nombre +'&latitud=' + latitud + '&longitud=' + longitud;
 });

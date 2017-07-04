@@ -22,7 +22,7 @@ block content
             button.close(type='button', data-dismiss='alert', aria-label='Close')
               span(aria-hidden='true') ×
             p= info
-        form#create-map(role="form" action='https://tfgmaps-1617.herokuapp.com/crearmapa' method='post')
+        form#create-map(role="form" action='http://tfg1617maps.zapto.org:8080/crearmapa' method='post')
           .form-group#name-group
             label.control-label.white-element(for="map-name") Nombre del mapa:           
             input#map-name.form-control(type="text", name="nombre", required="true", aria-describedby='helpBlockname')

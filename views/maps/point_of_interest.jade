@@ -27,7 +27,7 @@ block content
           #map-canvas
         .form-actions
           button.btn.btn-primary(onclick='searchAddress();') Obtener latitud y longitud
-        form#create-poi(role="form" action='https://tfgmaps-1617.herokuapp.com/crearpoi', method='post', enctype='multipart/form-data')
+        form#create-poi(role="form" action='http://tfg1617maps.zapto.org:8080/crearpoi', method='post', enctype='multipart/form-data')
           .form-group                 
             input#id-mapa.form-control.hide-element(type="text", value=id, readonly='', name='id_mapa')
           .form-group                 
