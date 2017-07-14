@@ -127,16 +127,33 @@ module.exports={
         elemento1:null,
         archivo1:null,
         tamanio1:fields.tamanio1,
+        altura1:fields.altura1,
         transparent1:null,
         elemento2:null,
         archivo2:null,
         tamanio2:null,
         transparent2:null,
+        altura2:fields.altura2,
+        posicion2:fields.optradio_position2,
         elemento3:null,
         archivo3:null,
         tamanio3:null,
         transparent3:null,
+        altura3:fields.altura3,
+        posicion3:fields.optradio_position3,
   		}
+      if(fields.altura1==""){
+        poi.altura1 =null
+      }
+      if(fields.altura2==""){
+        poi.altura2 =null
+      }
+      if(fields.altura3==""){
+        poi.altura3 =null
+      }
+      console.log("altura1 " + poi.altura1);
+      console.log("altura2 " + poi.altura2);
+      console.log("altura3 " + poi.altura3);
       var dirname = path.join(__dirname, '..', 'public/uploads/');
       var randomName = createRandomName()
       if(fields.optradio == 'si'){
@@ -309,10 +326,17 @@ module.exports={
                 })
               }
               else{
-                //no hay elemento 2
-                console.log("no hay elemento2");
-                console.log("el archivo1 es: "+ poi.archivo1);
-                guardarBBDD(res, poi, latitud_mapa, longitud_mapa, id)
+                console.log("no hay elemento 2");
+                //actualizar BBDD editarPOI
+                poi.elemento2 = null
+                poi.archivo2 = null
+                poi.transparent2 = null
+                poi.tamanio2 = null
+                poi.elemento3 = null
+                poi.archivo3 = null
+                poi.transparent3 = null
+                poi.tamanio3 = null
+                actualizarPOIBBDD(res, poi, id, nombre, id_poi)
               }
             }
           })
@@ -488,8 +512,16 @@ module.exports={
               }
               else{
                 console.log("no hay elemento 2");
-                console.log("el archivo1 es: "+poi.archivo1);
-                guardarBBDD(res, poi, latitud_mapa, longitud_mapa, id)
+                //actualizar BBDD editarPOI
+                poi.elemento2 = null
+                poi.archivo2 = null
+                poi.transparent2 = null
+                poi.tamanio2 = null
+                poi.elemento3 = null
+                poi.archivo3 = null
+                poi.transparent3 = null
+                poi.tamanio3 = null
+                actualizarPOIBBDD(res, poi, id, nombre, id_poi)
               }
             }
           })
@@ -506,22 +538,56 @@ module.exports={
     var db=mysql.createConnection(config);
     var id = req.body.id;
 	  var respuesta={res:false};
+    var archivo1= null
+    var archivo2= null
+    var archivo3= null
 
     db.connect();
-	  db.query('delete from POI where idPOI = ?',id, function(err,rows,fields){
-		  if(err){
+    db.query('SELECT archivo1,archivo2,archivo3 FROM  POI where idPOI = ?',id, function(err,rows,fields){
+      if(err){
         res.status(500);
         respuesta.res=false;
         db.end();
-  			res.json(respuesta);
+        res.json(respuesta);
         res.end();
       }
       else{
-        respuesta.res=true;
-        db.end();
-  			res.json(respuesta);
+        //almacenamos los archivos para borrarlos tras borrar el POI
+        archivo1=rows[0].archivo1
+        archivo2=rows[0].archivo2
+        archivo3=rows[0].archivo3
+        db.query('delete from POI where idPOI = ?',id, function(err,rows,fields){
+    		  if(err){
+            res.status(500);
+            respuesta.res=false;
+            db.end();
+      			res.json(respuesta);
+            res.end();
+          }
+          else{
+            respuesta.res=true;
+            var dirname = path.join(__dirname, '..', 'public/uploads/');
+            console.log("Borrando archivo1");
+            fs.unlink(dirname+archivo1,function(err){
+              if(err) return console.log(err);
+              console.log('file1 deleted successfully');
+            });
+            console.log("Borrando archivo2");
+            fs.unlink(dirname+archivo2,function(err){
+              if(err) return console.log(err);
+              console.log('file2 deleted successfully');
+            });
+            console.log("Borrando archivo3");
+            fs.unlink(dirname+archivo3,function(err){
+              if(err) return console.log(err);
+              console.log('file3 deleted successfully');
+            });
+            db.end();
+      			res.json(respuesta);
+          }
+    		});
       }
-		});
+    });
 	},
   //obtiene los datos del POI a modificar y los pinta en la pantalla de modificar el POI
   getModificarPoi : function(req, res, next){
@@ -550,7 +616,6 @@ module.exports={
     console.log("postModificarPoi");
     var form = new formidable.IncomingForm();
     form.parse(req, function (err, fields, files) {
-      console.log("analizamos el form");
       var nombre=fields.nombre_mapa;
       var id = fields.id_mapa;
       var id_poi = fields.id_poi
@@ -572,16 +637,29 @@ module.exports={
         archivo1: fields.old_file1,
         tamanio1: fields.tamanio1,
         transparent1: fields.transparent1,
+        altura1: fields.altura1,
         elemento2: fields.optradio_element2,
         archivo2: fields.old_file2,
         tamanio2: fields.tamanio2,
         transparent2: fields.transparent2,
+        altura2: fields.altura2,
+        posicion2: fields.optradio_position2,
         elemento3: fields.optradio_element3,
         archivo3: fields.old_file3,
         tamanio3: fields.tamanio3,
         transparent3: fields.transparent3,
+        altura3: fields.altura3,
+        posicion3: fields.optradio_position3,
   		}
-
+      if(fields.altura1==""){
+        poi.altura1=null;
+      }
+      if(fields.altura2==""){
+        poi.altura3=null;
+      }
+      if(fields.altura3==""){
+        poi.altura3=null;
+      }
       if(fields.optradio == 'si'){
         if(fields.optradio_element1=='imagen'){
           console.log("elemento1 imagen");
@@ -601,7 +679,10 @@ module.exports={
                 poi.archivo1 = imagename1
                 poi.transparent1=null
                 if(fields.old_file1!=undefined && fields.old_file1!=""){
-                  fs.unlinkSync(dirname+fields.old_file1)
+                  fs.unlink(dirname+fields.old_field1,function(err){
+                    if(err) return console.log(err);
+                    console.log('file1 deleted successfully');
+                  });
                 }
                 console.log("comprobamos elemento2");
                 if(fields.optradio_element2=='imagen'){
@@ -622,7 +703,10 @@ module.exports={
                         poi.archivo2 = imagename2
                         poi.transparent2=null
                         if(fields.old_file2!=undefined && fields.old_file2!=""){
-                          fs.unlinkSync(dirname+fields.old_file2)
+                          fs.unlink(dirname+fields.old_field2,function(err){
+                            if(err) return console.log(err);
+                            console.log('file2 deleted successfully');
+                          });
                         }
                         console.log("comprobamos elemento3");
                         if(fields.optradio_element3=='imagen'){
@@ -643,7 +727,10 @@ module.exports={
                                 poi.archivo3 = imagename3
                                 poi.transparent3=null
                                 if(fields.old_file3!=undefined && fields.old_file3!=""){
-                                  fs.unlinkSync(dirname+fields.old_file3)
+                                  fs.unlink(dirname+fields.old_field3,function(err){
+                                    if(err) return console.log(err);
+                                    console.log('file3 deleted successfully');
+                                  });
                                 }
                                 //actualizar BBDD editarPOI
                                 actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -678,7 +765,10 @@ module.exports={
                                   poi.transparent3=fields.transparent3
                                 }
                                 if(fields.old_file3!=undefined && fields.old_file3!=""){
-                                  fs.unlinkSync(dirname+fields.old_file3)
+                                  fs.unlink(dirname+fields.old_field3,function(err){
+                                    if(err) return console.log(err);
+                                    console.log('file3 deleted successfully');
+                                  });
                                 }
                                 //actualizar BBDD editarPOI
                                 actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -724,7 +814,10 @@ module.exports={
                             poi.archivo3 = imagename3
                             poi.transparent3=null
                             if(fields.old_file3!=undefined && fields.old_file3!=""){
-                              fs.unlinkSync(dirname+fields.old_file3)
+                              fs.unlink(dirname+fields.old_field3,function(err){
+                                if(err) return console.log(err);
+                                console.log('file3 deleted successfully');
+                              });
                             }
                             //actualizar BBDD editarPOI
                             actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -755,7 +848,10 @@ module.exports={
                             poi.archivo3 = videoname3
                             poi.transparent3=fields.transparent3
                             if(fields.old_file3!=undefined && fields.old_file3!=""){
-                              fs.unlinkSync(dirname+fields.old_file3)
+                              fs.unlink(dirname+fields.old_field3,function(err){
+                                if(err) return console.log(err);
+                                console.log('file3 deleted successfully');
+                              });
                             }
                             //actualizar BBDD editarPOI
                             actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -800,7 +896,10 @@ module.exports={
                           poi.transparent2=fields.transparent2
                         }
                         if(fields.old_file2!=undefined && fields.old_file2!=""){
-                          fs.unlinkSync(dirname+fields.old_file2)
+                          fs.unlink(dirname+fields.old_field2,function(err){
+                            if(err) return console.log(err);
+                            console.log('file2 deleted successfully');
+                          });
                         }
                         console.log("comprobamos elemento3");
                         if(fields.optradio_element3=='imagen'){
@@ -821,7 +920,10 @@ module.exports={
                                 poi.archivo3 = imagename3
                                 poi.transparent3=null
                                 if(fields.old_file3!=undefined && fields.old_file3!=""){
-                                  fs.unlinkSync(dirname+fields.old_file3)
+                                  fs.unlink(dirname+fields.old_field3,function(err){
+                                    if(err) return console.log(err);
+                                    console.log('file3 deleted successfully');
+                                  });
                                 }
                                 //actualizar BBDD editarPOI
                                 actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -856,7 +958,10 @@ module.exports={
                                   poi.transparent3=fields.transparent3
                                 }
                                 if(fields.old_file3!=undefined && fields.old_file3!=""){
-                                  fs.unlinkSync(dirname+fields.old_file3)
+                                  fs.unlink(dirname+fields.old_field3,function(err){
+                                    if(err) return console.log(err);
+                                    console.log('file3 deleted successfully');
+                                  });
                                 }
                                 //actualizar BBDD editarPOI
                                 actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -902,7 +1007,10 @@ module.exports={
                             poi.archivo3 = imagename3
                             poi.transparent3=null
                             if(fields.old_file3!=undefined && fields.old_file3!=""){
-                              fs.unlinkSync(dirname+fields.old_file3)
+                              fs.unlink(dirname+fields.old_field3,function(err){
+                                if(err) return console.log(err);
+                                console.log('file3 deleted successfully');
+                              });
                             }
                             //actualizar BBDD editarPOI
                           }
@@ -936,7 +1044,10 @@ module.exports={
                               poi.transparent3=fields.transparent3
                             }
                             if(fields.old_file3!=undefined && fields.old_file3!=""){
-                              fs.unlinkSync(dirname+fields.old_file3)
+                              fs.unlink(dirname+fields.old_field3,function(err){
+                                if(err) return console.log(err);
+                                console.log('file3 deleted successfully');
+                              });
                             }
                             //actualizar BBDD editarPOI
                             actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -996,7 +1107,10 @@ module.exports={
                     poi.archivo2 = imagename2
                     poi.transparent2=null
                     if(fields.old_file2!=undefined && fields.old_file2!=""){
-                      fs.unlinkSync(dirname+fields.old_file2)
+                      fs.unlink(dirname+fields.old_field2,function(err){
+                        if(err) return console.log(err);
+                        console.log('file2 deleted successfully');
+                      });
                     }
                     console.log("comprobamos elemento3");
                     if(fields.optradio_element3=='imagen'){
@@ -1017,7 +1131,10 @@ module.exports={
                             poi.archivo3 = imagename3
                             poi.transparent3=null
                             if(fields.old_file3!=undefined && fields.old_file3!=""){
-                              fs.unlinkSync(dirname+fields.old_file3)
+                              fs.unlink(dirname+fields.old_field3,function(err){
+                                if(err) return console.log(err);
+                                console.log('file3 deleted successfully');
+                              });
                             }
                             //actualizar BBDD editarPOI
                             actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -1052,7 +1169,10 @@ module.exports={
                               poi.transparent3=fields.transparent3
                             }
                             if(fields.old_file3!=undefined && fields.old_file3!=""){
-                              fs.unlinkSync(dirname+fields.old_file3)
+                              fs.unlink(dirname+fields.old_field3,function(err){
+                                if(err) return console.log(err);
+                                console.log('file3 deleted successfully');
+                              });
                             }
                             //actualizar BBDD editarPOI
                             actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -1064,6 +1184,15 @@ module.exports={
                         //actualizar BBDD editarPOI
                         actualizarPOIBBDD(res, poi, id, nombre, id_poi)
                       }
+                    }
+                    else{
+                      console.log("no hay elemento 3");
+                      //actualizar BBDD editarPOI
+                      poi.elemento3 = null
+                      poi.archivo3 = null
+                      poi.transparent3 = null
+                      poi.tamanio3 = null
+                      actualizarPOIBBDD(res, poi, id, nombre, id_poi)
                     }
                   }
                 })
@@ -1089,7 +1218,10 @@ module.exports={
                         poi.archivo3 = imagename3
                         poi.transparent3=null
                         if(fields.old_file3!=undefined && fields.old_file3!=""){
-                          fs.unlinkSync(dirname+fields.old_file3)
+                          fs.unlink(dirname+fields.old_field3,function(err){
+                            if(err) return console.log(err);
+                            console.log('file3 deleted successfully');
+                          });
                         }
                         //actualizar BBDD editarPOI
                         actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -1124,7 +1256,10 @@ module.exports={
                           poi.transparent3=fields.transparent3
                         }
                         if(fields.old_file3!=undefined && fields.old_file3!=""){
-                          fs.unlinkSync(dirname+fields.old_file3)
+                          fs.unlink(dirname+fields.old_field3,function(err){
+                            if(err) return console.log(err);
+                            console.log('file3 deleted successfully');
+                          });
                         }
                         //actualizar BBDD editarPOI
                         actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -1170,7 +1305,10 @@ module.exports={
                       poi.transparent2=fields.transparent2
                     }
                     if(fields.old_file2!=undefined && fields.old_file2!=""){
-                      fs.unlinkSync(dirname+fields.old_file2)
+                      fs.unlink(dirname+fields.old_field2,function(err){
+                        if(err) return console.log(err);
+                        console.log('file2 deleted successfully');
+                      });
                     }
                     console.log("comprobamos elemento3");
                     if(fields.optradio_element3=='imagen'){
@@ -1191,7 +1329,10 @@ module.exports={
                             poi.archivo3 = imagename3
                             poi.transparent3=null
                             if(fields.old_file3!=undefined && fields.old_file3!=""){
-                              fs.unlinkSync(dirname+fields.old_file3)
+                              fs.unlink(dirname+fields.old_field3,function(err){
+                                if(err) return console.log(err);
+                                console.log('file3 deleted successfully');
+                              });
                             }
                             //actualizar BBDD editarPOI
                             actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -1226,7 +1367,10 @@ module.exports={
                               poi.transparent3=fields.transparent3
                             }
                             if(fields.old_file3!=undefined && fields.old_file3!=""){
-                              fs.unlinkSync(dirname+fields.old_file3)
+                              fs.unlink(dirname+fields.old_field3,function(err){
+                                if(err) return console.log(err);
+                                console.log('file3 deleted successfully');
+                              });
                             }
                             //actualizar BBDD editarPOI
                             actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -1238,6 +1382,15 @@ module.exports={
                         //actualizar BBDD editarPOI
                         actualizarPOIBBDD(res, poi, id, nombre, id_poi)
                       }
+                    }
+                    else{
+                      console.log("no hay elemento 3");
+                      //actualizar BBDD editarPOI
+                      poi.elemento3 = null
+                      poi.archivo3 = null
+                      poi.transparent3 = null
+                      poi.tamanio3 = null
+                      actualizarPOIBBDD(res, poi, id, nombre, id_poi)
                     }
                   }
                 })
@@ -1263,7 +1416,10 @@ module.exports={
                         poi.archivo3 = imagename3
                         poi.transparent3=null
                         if(fields.old_file3!=undefined && fields.old_file3!=""){
-                          fs.unlinkSync(dirname+fields.old_file3)
+                          fs.unlink(dirname+fields.old_field3,function(err){
+                            if(err) return console.log(err);
+                            console.log('file3 deleted successfully');
+                          });
                         }
                         //actualizar BBDD editarPOI
                         actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -1298,7 +1454,10 @@ module.exports={
                           poi.transparent3=fields.transparent3
                         }
                         if(fields.old_file3!=undefined && fields.old_file3!=""){
-                          fs.unlinkSync(dirname+fields.old_file3)
+                          fs.unlink(dirname+fields.old_field3,function(err){
+                            if(err) return console.log(err);
+                            console.log('file3 deleted successfully');
+                          });
                         }
                         //actualizar BBDD editarPOI
                         actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -1359,7 +1518,10 @@ module.exports={
                   poi.transparent1=fields.transparent1
                 }
                 if(fields.old_file1!=undefined && fields.old_file1!=""){
-                  fs.unlinkSync(dirname+fields.old_file1)
+                  fs.unlink(dirname+fields.old_field1,function(err){
+                    if(err) return console.log(err);
+                    console.log('file1 deleted successfully');
+                  });
                 }
                 console.log("comprobamos elemento2");
                 if(fields.optradio_element2=='imagen'){
@@ -1380,7 +1542,10 @@ module.exports={
                         poi.archivo2 = imagename2
                         poi.transparent2=null
                         if(fields.old_file2!=undefined && fields.old_file2!=""){
-                          fs.unlinkSync(dirname+fields.old_file2)
+                          fs.unlink(dirname+fields.old_field2,function(err){
+                            if(err) return console.log(err);
+                            console.log('file2 deleted successfully');
+                          });
                         }
                         console.log("comprobamos elemento3");
                         if(fields.optradio_element3=='imagen'){
@@ -1401,7 +1566,10 @@ module.exports={
                                 poi.archivo3 = imagename3
                                 poi.transparent3=null
                                 if(fields.old_file3!=undefined && fields.old_file3!=""){
-                                  fs.unlinkSync(dirname+fields.old_file3)
+                                  fs.unlink(dirname+fields.old_field3,function(err){
+                                    if(err) return console.log(err);
+                                    console.log('file3 deleted successfully');
+                                  });
                                 }
                                 //actualizar BBDD editarPOI
                                 actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -1436,7 +1604,10 @@ module.exports={
                                   poi.transparent3=fields.transparent3
                                 }
                                 if(fields.old_file3!=undefined && fields.old_file3!=""){
-                                  fs.unlinkSync(dirname+fields.old_file3)
+                                  fs.unlink(dirname+fields.old_field3,function(err){
+                                    if(err) return console.log(err);
+                                    console.log('file3 deleted successfully');
+                                  });
                                 }
                                 //actualizar BBDD editarPOI
                                 actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -1482,7 +1653,10 @@ module.exports={
                             poi.archivo3 = imagename3
                             poi.transparent3=null
                             if(fields.old_file3!=undefined && fields.old_file3!=""){
-                              fs.unlinkSync(dirname+fields.old_file3)
+                              fs.unlink(dirname+fields.old_field3,function(err){
+                                if(err) return console.log(err);
+                                console.log('file3 deleted successfully');
+                              });
                             }
                             //actualizar BBDD editarPOI
                             actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -1517,7 +1691,10 @@ module.exports={
                               poi.transparent3=fields.transparent3
                             }
                             if(fields.old_file3!=undefined && fields.old_file3!=""){
-                              fs.unlinkSync(dirname+fields.old_file3)
+                              fs.unlink(dirname+fields.old_field3,function(err){
+                                if(err) return console.log(err);
+                                console.log('file3 deleted successfully');
+                              });
                             }
                             //actualizar BBDD editarPOI
                             actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -1563,7 +1740,10 @@ module.exports={
                           poi.transparent2=fields.transparent2
                         }
                         if(fields.old_file2!=undefined && fields.old_file2!=""){
-                          fs.unlinkSync(dirname+fields.old_file2)
+                          fs.unlink(dirname+fields.old_field2,function(err){
+                            if(err) return console.log(err);
+                            console.log('file2 deleted successfully');
+                          });
                         }
                         console.log("comprobamos elemento3");
                         if(fields.optradio_element3=='imagen'){
@@ -1584,7 +1764,10 @@ module.exports={
                                 poi.archivo3 = imagename3
                                 poi.transparent3=null
                                 if(fields.old_file3!=undefined && fields.old_file3!=""){
-                                  fs.unlinkSync(dirname+fields.old_file3)
+                                  fs.unlink(dirname+fields.old_field3,function(err){
+                                    if(err) return console.log(err);
+                                    console.log('file3 deleted successfully');
+                                  });
                                 }
                                 //actualizar BBDD editarPOI
                                 actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -1619,7 +1802,10 @@ module.exports={
                                   poi.transparent3=fields.transparent3
                                 }
                                 if(fields.old_file3!=undefined && fields.old_file3!=""){
-                                  fs.unlinkSync(dirname+fields.old_file3)
+                                  fs.unlink(dirname+fields.old_field3,function(err){
+                                    if(err) return console.log(err);
+                                    console.log('file3 deleted successfully');
+                                  });
                                 }
                                 //actualizar BBDD editarPOI
                                 actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -1631,6 +1817,15 @@ module.exports={
                             //actualizar BBDD editarPOI
                             actualizarPOIBBDD(res, poi, id, nombre, id_poi)
                           }
+                        }
+                        else{
+                          console.log("no hay elemento 3");
+                          //actualizar BBDD editarPOI
+                          poi.elemento3 = null
+                          poi.archivo3 = null
+                          poi.transparent3 = null
+                          poi.tamanio3 = null
+                          actualizarPOIBBDD(res, poi, id, nombre, id_poi)
                         }
                       }
                     })
@@ -1656,7 +1851,10 @@ module.exports={
                             poi.archivo3 = imagename3
                             poi.transparent3=null
                             if(fields.old_file3!=undefined && fields.old_file3!=""){
-                              fs.unlinkSync(dirname+fields.old_file3)
+                              fs.unlink(dirname+fields.old_field3,function(err){
+                                if(err) return console.log(err);
+                                console.log('file3 deleted successfully');
+                              });
                             }
                             //actualizar BBDD editarPOI
                             actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -1691,7 +1889,10 @@ module.exports={
                               poi.transparent3=fields.transparent3
                             }
                             if(fields.old_file3!=undefined && fields.old_file3!=""){
-                              fs.unlinkSync(dirname+fields.old_file3)
+                              fs.unlink(dirname+fields.old_field3,function(err){
+                                if(err) return console.log(err);
+                                console.log('file3 deleted successfully');
+                              });
                             }
                             //actualizar BBDD editarPOI
                             actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -1754,7 +1955,10 @@ module.exports={
                     poi.archivo2 = imagename2
                     poi.transparent2=null
                     if(fields.old_file2!=undefined && fields.old_file2!=""){
-                      fs.unlinkSync(dirname+fields.old_file2)
+                      fs.unlink(dirname+fields.old_field2,function(err){
+                        if(err) return console.log(err);
+                        console.log('file2 deleted successfully');
+                      });
                     }
                     console.log("comprobamos elemento3");
                     if(fields.optradio_element3=='imagen'){
@@ -1775,7 +1979,10 @@ module.exports={
                             poi.archivo3 = imagename3
                             poi.transparent3=null
                             if(fields.old_file3!=undefined && fields.old_file3!=""){
-                              fs.unlinkSync(dirname+fields.old_file3)
+                              fs.unlink(dirname+fields.old_field3,function(err){
+                                if(err) return console.log(err);
+                                console.log('file3 deleted successfully');
+                              });
                             }
                             //actualizar BBDD editarPOI
                             actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -1810,7 +2017,10 @@ module.exports={
                               poi.transparent3=fields.transparent3
                             }
                             if(fields.old_file3!=undefined && fields.old_file3!=""){
-                              fs.unlinkSync(dirname+fields.old_file3)
+                              fs.unlink(dirname+fields.old_field3,function(err){
+                                if(err) return console.log(err);
+                                console.log('file3 deleted successfully');
+                              });
                             }
                             //actualizar BBDD editarPOI
                             actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -1822,6 +2032,15 @@ module.exports={
                         //actualizar BBDD editarPOI
                         actualizarPOIBBDD(res, poi, id, nombre, id_poi)
                       }
+                    }
+                    else{
+                      console.log("no hay elemento 3");
+                      //actualizar BBDD editarPOI
+                      poi.elemento3 = null
+                      poi.archivo3 = null
+                      poi.transparent3 = null
+                      poi.tamanio3 = null
+                      actualizarPOIBBDD(res, poi, id, nombre, id_poi)
                     }
                   }
                 })
@@ -1847,7 +2066,10 @@ module.exports={
                         poi.archivo3 = imagename3
                         poi.transparent3=null
                         if(fields.old_file3!=undefined && fields.old_file3!=""){
-                          fs.unlinkSync(dirname+fields.old_file3)
+                          fs.unlink(dirname+fields.old_field3,function(err){
+                            if(err) return console.log(err);
+                            console.log('file3 deleted successfully');
+                          });
                         }
                         //actualizar BBDD editarPOI
                         actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -1882,7 +2104,10 @@ module.exports={
                           poi.transparent3=fields.transparent3
                         }
                         if(fields.old_file3!=undefined && fields.old_file3!=""){
-                          fs.unlinkSync(dirname+fields.old_file3)
+                          fs.unlink(dirname+fields.old_field3,function(err){
+                            if(err) return console.log(err);
+                            console.log('file3 deleted successfully');
+                          });
                         }
                         //actualizar BBDD editarPOI
                         actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -1928,7 +2153,10 @@ module.exports={
                       poi.transparent2=fields.transparent2
                     }
                     if(fields.old_file2!=undefined && fields.old_file2!=""){
-                      fs.unlinkSync(dirname+fields.old_file2)
+                      fs.unlink(dirname+fields.old_field2,function(err){
+                        if(err) return console.log(err);
+                        console.log('file2 deleted successfully');
+                      });
                     }
                     console.log("comprobamos elemento3");
                     if(fields.optradio_element3=='imagen'){
@@ -1949,7 +2177,10 @@ module.exports={
                             poi.archivo3 = imagename3
                             poi.transparent3=null
                             if(fields.old_file3!=undefined && fields.old_file3!=""){
-                              fs.unlinkSync(dirname+fields.old_file3)
+                              fs.unlink(dirname+fields.old_field3,function(err){
+                                if(err) return console.log(err);
+                                console.log('file3 deleted successfully');
+                              });
                             }
                             //actualizar BBDD editarPOI
                             actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -1984,7 +2215,10 @@ module.exports={
                               poi.transparent3=fields.transparent3
                             }
                             if(fields.old_file3!=undefined && fields.old_file3!=""){
-                              fs.unlinkSync(dirname+fields.old_file3)
+                              fs.unlink(dirname+fields.old_field3,function(err){
+                                if(err) return console.log(err);
+                                console.log('file3 deleted successfully');
+                              });
                             }
                             //actualizar BBDD editarPOI
                             actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -1996,6 +2230,15 @@ module.exports={
                         //actualizar BBDD editarPOI
                         actualizarPOIBBDD(res, poi, id, nombre, id_poi)
                       }
+                    }
+                    else{
+                      console.log("no hay elemento 3");
+                      //actualizar BBDD editarPOI
+                      poi.elemento3 = null
+                      poi.archivo3 = null
+                      poi.transparent3 = null
+                      poi.tamanio3 = null
+                      actualizarPOIBBDD(res, poi, id, nombre, id_poi)
                     }
                   }
                 })
@@ -2021,7 +2264,10 @@ module.exports={
                         poi.archivo3 = imagename3
                         poi.transparent3=null
                         if(fields.old_file3!=undefined && fields.old_file3!=""){
-                          fs.unlinkSync(dirname+fields.old_file3)
+                          fs.unlink(dirname+fields.old_field3,function(err){
+                            if(err) return console.log(err);
+                            console.log('file3 deleted successfully');
+                          });
                         }
                         //actualizar BBDD editarPOI
                         actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -2056,7 +2302,10 @@ module.exports={
                           poi.transparent3=fields.transparent3
                         }
                         if(fields.old_file3!=undefined && fields.old_file3!=""){
-                          fs.unlinkSync(dirname+fields.old_file3)
+                          fs.unlink(dirname+fields.old_field3,function(err){
+                            if(err) return console.log(err);
+                            console.log('file3 deleted successfully');
+                          });
                         }
                         //actualizar BBDD editarPOI
                         actualizarPOIBBDD(res, poi, id, nombre, id_poi)
@@ -2098,13 +2347,22 @@ module.exports={
         }
       }else if(fields.optradio == 'no'){
         if(fields.old_file1!=undefined && fields.old_file1!=""){
-          fs.unlinkSync(dirname+fields.old_file1)
+          fs.unlink(dirname+fields.old_field1,function(err){
+            if(err) return console.log(err);
+            console.log('file1 deleted successfully');
+          });
         }
         if(fields.old_file2!=undefined && fields.old_file2!=""){
-          fs.unlinkSync(dirname+fields.old_file2)
+          fs.unlink(dirname+fields.old_field2,function(err){
+            if(err) return console.log(err);
+            console.log('file2 deleted successfully');
+          });
         }
         if(fields.old_file3!=undefined && fields.old_file3!=""){
-          fs.unlinkSync(dirname+fields.old_file3)
+          fs.unlink(dirname+fields.old_field3,function(err){
+            if(err) return console.log(err);
+            console.log('file3 deleted successfully');
+          });
         }
         poi.distancia = null
         poi.elemento1 = null

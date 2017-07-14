@@ -128,11 +128,16 @@ block content
                   | &nbsp;
                   label.control-label.white-element(for="transparent1") Video transparente
               .form-group#tamanio1-group
-                label.control-label.white-element(for="tamanio1") Tamaño  en %:
+                label.control-label.white-element(for="tamanio1") Tamaño  en sdu:
                   span.required-element &nbsp;*
                 input#tamanio1.form-control(type="text", name='tamanio1', required='true', value= ListPoi[0].tamanio1, aria-describedby='helpBlockTamanio1')
                 span#helpBlockTamanio1.help-block(style="display: none;")
-                
+              .form-group#altura1-group
+                label.control-label.white-element(for="altura1") Altura en metros:
+                if(ListPoi[0].altura1!=null)
+                  input#altura1.form-control(type="text", name='altura1', value= ListPoi[0].altura1) 
+                else
+                  input#altura1.form-control(type="text", name='altura1', value= "")
               h3 Elemento realidad aumentada 2
               .form-group#arelement2-group
                 label.control-label.white-element(for="optradio_element2") Tipo de archivo: 
@@ -159,10 +164,32 @@ block content
                   | &nbsp;
                   label.control-label.white-element(for="transparent2") Video transparente
               .form-group#tamanio2-group
-                label.control-label.white-element(for="tamanio2") Tamaño  en %:
+                label.control-label.white-element(for="tamanio2") Tamaño  en sdu:
                   span.required-element &nbsp;*
                 input#tamanio2.form-control(type="text", name='tamanio2', required='true', value= ListPoi[0].tamanio2, aria-describedby='helpBlockTamanio2')
                 span#helpBlockTamanio2.help-block(style="display: none;")
+              .form-group#positionelement2-group
+                label.control-label.white-element(for="optradio_position2") Posicionamiento del elemento: 
+                  span.required-element &nbsp;*&nbsp;
+                  .radio
+                    label
+                      input(type='radio', name='optradio_position2', value='izquierda', checked= ("izquierda"==ListPoi[0].posicion2) ? 'selected' : null)
+                      | Izquierda del usuario
+                  .radio
+                    label
+                      input(type='radio', name='optradio_position2', value='derecha', checked= ("derecha"==ListPoi[0].posicion2) ? 'selected' : null)
+                      | Derecha del usuario
+                  .radio
+                    label
+                      input(type='radio', name='optradio_position2', value='atras', checked= ("atras"==ListPoi[0].posicion2) ? 'selected' : null)
+                      | Detras del usuario  
+                span#helpBlockPositionelement2.help-block(style="display: none;")
+              .form-group#altura2-group
+                label.control-label.white-element(for="altura2") Altura en metros:
+                if(ListPoi[0].altura2!=null)
+                  input#altura2.form-control(type="text", name='altura2', value= ListPoi[0].altura2)  
+                else
+                  input#altura2.form-control(type="text", name='altura2', value= "")
               h3 Elemento realidad aumentada 3
               .form-group#arelement3-group
                 label.control-label.white-element(for="optradio_element3") Tipo de archivo: 
@@ -189,10 +216,32 @@ block content
                   | &nbsp;
                   label.control-label.white-element(for="transparent3") Video transparente
               .form-group#tamanio3-group
-                label.control-label.white-element(for="tamanio3") Tamaño  en %:
+                label.control-label.white-element(for="tamanio3") Tamaño  en sdu:
                   span.required-element &nbsp;*
                 input#tamanio3.form-control(type="text", name='tamanio3', required='true', value= ListPoi[0].tamanio3, aria-describedby='helpBlockTamanio3')
-                span#helpBlockTamanio3.help-block(style="display: none;")    
+                span#helpBlockTamanio3.help-block(style="display: none;")
+              .form-group#positionelement3-group
+                label.control-label.white-element(for="optradio_position3") Posicionamiento del elemento: 
+                  span.required-element &nbsp;*&nbsp;
+                  .radio
+                    label
+                      input(type='radio', name='optradio_position3', value='izquierda', checked= ("izquierda"==ListPoi[0].posicion3) ? 'selected' : null)
+                      | Izquierda del usuario
+                  .radio
+                    label
+                      input(type='radio', name='optradio_position3', value='derecha', checked= ("derecha"==ListPoi[0].posicion3) ? 'selected' : null)
+                      | Derecha del usuario
+                  .radio
+                    label
+                      input(type='radio', name='optradio_position3', value='atras', checked= ("atras"==ListPoi[0].posicion3) ? 'selected' : null)
+                      | Detras del usuario  
+                span#helpBlockPositionelement3.help-block(style="display: none;")      
+              .form-group#altura3-group
+                label.control-label.white-element(for="altura3") Altura en metros:
+                if(ListPoi[0].altura3!=null)
+                  input#altura3.form-control(type="text", name='altura3', value= ListPoi[0].altura3)
+                else
+                  input#altura3.form-control(type="text", name='altura3', value= "")  
             .form-actions
               button.btn.btn-primary(type="submit",id='btn-modificarPOI') MODIFICAR POI
             div.final-separation
