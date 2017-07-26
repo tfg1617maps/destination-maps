@@ -13,21 +13,21 @@ block content
             span(aria-hidden='true') ×
           strong Imposible acceder a la BBDD para borrar el mapa, pruebe de nuevo en unos instantes
         .alert.alert-warning.alert.alert-dismissable(id='message', style="display: none;")
-          a.close(href='http://tfg1617maps.zapto.org:8080/nuevomapa', data-dismiss='alert', aria-label='close') ×
+          a.close(href='/nuevomapa', data-dismiss='alert', aria-label='close') ×
           strong No hay mapas almacenados en la base de datos. 
-            a.alert-link(href="http://tfg1617maps.zapto.org:8080/nuevomapa") Crea el primer mapa.
+            a.alert-link(href="/nuevomapa") Crea el primer mapa.
         if error != undefined
           .alert.alert-danger
             strong= error
         else    
           if ListMapas == 0
             .alert.alert-warning(role='alert')
-              a.close(href='http://tfg1617maps.zapto.org:8080/nuevomapa', data-dismiss='alert', aria-label='close') ×
+              a.close(href='/nuevomapa', data-dismiss='alert', aria-label='close') ×
               if nombre_mapa != undefined
                 strong No existen mapas con el nombre indicado: #{nombre_mapa}.
               else
                 strong No hay mapas almacenados en la base de datos. 
-                  a.alert-link(href="http://tfg1617maps.zapto.org:8080/nuevomapa") Crea el primer mapa.       
+                  a.alert-link(href="/nuevomapa") Crea el primer mapa.       
           else
             .table-responsive
               table.table.table-bordered.text-center(id='tbl-mapas')

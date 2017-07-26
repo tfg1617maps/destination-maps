@@ -26,7 +26,7 @@ block content
             #map-canvas
           .form-actions
             button.btn.btn-primary(onclick='searchAddress();') Obtener latitud y longitud
-          form#create-poi(role="form" action='http://tfg1617maps.zapto.org:8080/editar', method='post', enctype='multipart/form-data')
+          form#create-poi(role="form" action='/editar', method='post', enctype='multipart/form-data')
             .form-group                  
               input#nombre-mapa.form-control.hide-element(type="text", readonly='', name='nombre_mapa', value= nombre_mapa)
             .form-group                  
