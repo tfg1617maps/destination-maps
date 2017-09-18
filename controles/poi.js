@@ -151,9 +151,6 @@ module.exports={
       if(fields.altura3==""){
         poi.altura3 =null
       }
-      console.log("altura1 " + poi.altura1);
-      console.log("altura2 " + poi.altura2);
-      console.log("altura3 " + poi.altura3);
       var dirname = path.join(__dirname, '..', 'public/uploads/');
       var randomName = createRandomName()
       if(fields.optradio == 'si'){
@@ -327,7 +324,7 @@ module.exports={
               }
               else{
                 console.log("no hay elemento 2");
-                //actualizar BBDD editarPOI
+                //almacenar elemento BBDD
                 poi.elemento2 = null
                 poi.archivo2 = null
                 poi.transparent2 = null
@@ -336,7 +333,7 @@ module.exports={
                 poi.archivo3 = null
                 poi.transparent3 = null
                 poi.tamanio3 = null
-                actualizarPOIBBDD(res, poi, id, nombre, id_poi)
+                guardarBBDD(res, poi, latitud_mapa, longitud_mapa, id)
               }
             }
           })

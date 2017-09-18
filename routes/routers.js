@@ -7,9 +7,6 @@ var controllers =require('.././controles');
 router.get('/', controllers.home.index);
 //buscador de mapas
 router.get('/searhmapas', controllers.home.search);
-//categoria
-router.get('/categoria', controllers.home.categoria);
-router.get('/categoryfilter', controllers.home.poiByCategory);
 //descargar contenido aumentado
 router.get('/downloads',controllers.home.download);
 //pagina crear nuevo mapa
