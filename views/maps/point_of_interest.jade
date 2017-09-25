@@ -199,12 +199,7 @@ block content
               .form-group#transparent3-group
                 input(type='checkbox', name='transparent3', value='yes')
                 | &nbsp;
-                label.control-label.white-element(for="transparent3") Video transparente
-            .form-group#tamanio3-group
-              label.control-label.white-element(for="tamanio3") Tamaño  en sdu:
-                span.required-element &nbsp;*
-              input#tamanio3.form-control(type="text", name='tamanio3', required='true', aria-describedby='helpBlockTamanio3')
-              span#helpBlockTamanio3.help-block(style="display: none;")
+                label.control-label.white-element(for="transparent3") Video transparente  
             .form-group#positionelement3-group
               label.control-label.white-element(for="optradio_position3") Posicionamiento del elemento: 
                 span.required-element &nbsp;*&nbsp;
@@ -220,9 +215,14 @@ block content
                   label
                     input(type='radio', name='optradio_position3', value='atras')
                     | Detras del usuario
+            .form-group#tamanio3-group
+              label.control-label.white-element(for="tamanio3") Tamaño  en sdu:
+                span.required-element &nbsp;*
+              input#tamanio3.form-control(type="text", name='tamanio3', required='true', aria-describedby='helpBlockTamanio3')
+              span#helpBlockTamanio3.help-block(style="display: none;")
             .form-group#altura3-group
               label.control-label.white-element(for="altura3") Altura en metros:
-              input#altura3.form-control(type="text", name='altura3')       
+              input#altura3.form-control(type="text", name='altura3')               
           .form-actions
             button.btn.btn-primary(type="submit",id='btn-crearPOI') CREAR POI
           div.final-separation

@@ -65,7 +65,7 @@ block content
                 option(value="Catedral", selected= ("Catedral"==ListPoi[0].categoria) ? 'selected' : null) Catedral
                 option(value="Convento", selected= ("Convento"==ListPoi[0].categoria) ? 'selected' : null) Convento
                 option(value="Escultura", selected= ("Escultura"==ListPoi[0].categoria) ? 'selected' : null) Escultura
-                option(value="Estacion", selected= (""==ListPoi[0].categoria) ? 'selected' : null) Estacion
+                option(value="Estacion", selected= ("Estacion"==ListPoi[0].categoria) ? 'selected' : null) Estacion
                 option(value="Iglesia", selected= ("Iglesia"==ListPoi[0].categoria) ? 'selected' : null) Iglesia
                 option(value="Mercado", selected= ("Mercado"==ListPoi[0].categoria) ? 'selected' : null) Mercado
                 option(value="Monumento", selected= ("Monumento"==ListPoi[0].categoria) ? 'selected' : null) Monumento
@@ -215,11 +215,6 @@ block content
                   input(type='checkbox', name='transparent3', value='yes' checked= ("yes"==ListPoi[0].transparent3) ? 'selected' : null)
                   | &nbsp;
                   label.control-label.white-element(for="transparent3") Video transparente
-              .form-group#tamanio3-group
-                label.control-label.white-element(for="tamanio3") Tamaño  en sdu:
-                  span.required-element &nbsp;*
-                input#tamanio3.form-control(type="text", name='tamanio3', required='true', value= ListPoi[0].tamanio3, aria-describedby='helpBlockTamanio3')
-                span#helpBlockTamanio3.help-block(style="display: none;")
               .form-group#positionelement3-group
                 label.control-label.white-element(for="optradio_position3") Posicionamiento del elemento: 
                   span.required-element &nbsp;*&nbsp;
@@ -242,6 +237,11 @@ block content
                   input#altura3.form-control(type="text", name='altura3', value= ListPoi[0].altura3)
                 else
                   input#altura3.form-control(type="text", name='altura3', value= "")  
+              .form-group#tamanio3-group
+                label.control-label.white-element(for="tamanio3") Tamaño  en sdu:
+                  span.required-element &nbsp;*
+                input#tamanio3.form-control(type="text", name='tamanio3', required='true', value= ListPoi[0].tamanio3, aria-describedby='helpBlockTamanio3')
+                span#helpBlockTamanio3.help-block(style="display: none;")
             .form-actions
               button.btn.btn-primary(type="submit",id='btn-modificarPOI') MODIFICAR POI
             div.final-separation
