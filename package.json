@@ -1,6 +1,6 @@
 {
   "name": "maps",
-  "version": "0.0.0",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
@@ -14,6 +14,9 @@
     "jade": "~1.11.0",
     "morgan": "~1.7.0",
     "mysql": "^2.13.0",
+    "cors": "2.8.4",
+    "formidable": "1.1.1",
+    "mv": "2.1.1",
     "serve-favicon": "~2.3.2"
   }
 }
