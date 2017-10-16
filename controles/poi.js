@@ -165,9 +165,12 @@ function almacenarElementoMultimedia3(res,files,fields,poi,dirname,randomName,pa
 }
 
 //funcion que se encarga de eleminar un elemento multimedia
-function eliminarElementoMultimedia(elemento,nombre,posicion){
+function eliminarElementoMultimedia(dirname,elemento,posicion){
+  console.log("dirname: " + dirname);
+  console.log("elemento: " + elemento);
+  console.log("nombre: " + nombre);
   if(elemento!=undefined && elemento !=""){
-    fs.unlink(dirname+nombre,function(err){
+    fs.unlink(dirname+elemento,function(err){
       if(err) return console.log(err);
       console.log('elemento ' + posicion + ' borrado satisfactoriamente');
     })
@@ -188,9 +191,9 @@ function modificarAlmacenarElementoMultimedia1(res,files,fields,poi,dirname,rand
       else{
         console.log('modificar: almacenado' + tipo + 'correctamente');
         poi.elemento1 = tipo
-        poi.archivo1 = elementName2
+        poi.archivo1 = elementName1
         poi.transparent1 = transparente
-        eliminarElementoMultimedia(fields.old_file1,fields.old_field1,1);
+        eliminarElementoMultimedia(dirname,fields.old_file1,1);
         //comprobamos elemento2
         console.log("modificar comprobamos elemento2");
         comprobarElemento2(res,files,fields,poi,dirname,randomName,files.filetoupload2.path,files.filetoupload2.name,fields.optradio_element2,fields.transparent2,id,nombre,id_poi)
@@ -208,11 +211,11 @@ function modificarAlmacenarElementoMultimedia1(res,files,fields,poi,dirname,rand
 function comprobarElemento2(res,files,fields,poi,dirname,randomName,path,name,tipo,transparente,id,nombre,id_poi){
   if(tipo=='imagen'){
     console.log("recibida imagen2");
-    modificarAlmacenarElementoMultimedia3(res,files,fields,poi,dirname,randomName,files.filetoupload2.path,files.filetoupload2.name,'imagen',null,id,nombre,id_poi)
+    modificarAlmacenarElementoMultimedia2(res,files,fields,poi,dirname,randomName,files.filetoupload2.path,files.filetoupload2.name,'imagen',null,id,nombre,id_poi)
   }
   else if(tipo=='video'){
     console.log("recibido video2");
-    modificarAlmacenarElementoMultimedia3(res,files,fields,poi,dirname,randomName,files.filetoupload2.path,files.filetoupload2.name,'video',fields.transparent2,id,nombre,id_poi)
+    modificarAlmacenarElementoMultimedia2(res,files,fields,poi,dirname,randomName,files.filetoupload2.path,files.filetoupload2.name,'video',fields.transparent2,id,nombre,id_poi)
   }
   else{
     //actualizar BBDD editarPOI
@@ -243,7 +246,7 @@ function modificarAlmacenarElementoMultimedia2(res,files,fields,poi,dirname,rand
         poi.elemento2 = tipo
         poi.archivo2 = elementName2
         poi.transparent2 = transparente
-        eliminarElementoMultimedia(fields.old_file2,fields.old_field2,2);
+        eliminarElementoMultimedia(dirname,fields.old_file2,2);
         //comprobamos elemento3
         console.log("modificar comprobamos elemento3");
         comprobarElemento3(res,files,fields,poi,dirname,randomName,files.filetoupload3.path,files.filetoupload3.name,fields.optradio_element3,fields.transparent3,id,nombre,id_poi)
@@ -292,7 +295,7 @@ function modificarAlmacenarElementoMultimedia3(res,files,fields,poi,dirname,rand
         poi.elemento3 = tipo
         poi.archivo3 = elementName3
         poi.transparent3=transparente
-        eliminarElementoMultimedia(fields.old_file3,fields.old_field3,3);
+        eliminarElementoMultimedia(dirname,fields.old_file3,3);
         //actualizar BBDD editarPOI
         actualizarPOIBBDD(res, poi, id, nombre, id_poi)
       }
@@ -567,16 +570,16 @@ module.exports={
           modificarAlmacenarElementoMultimedia1(res,files,fields,poi,dirname,randomName,files.filetoupload1.path,files.filetoupload1.name,'imagen',null,id,nombre,id_poi)
         }
         else if(fields.optradio_element1=='video'){
-          console.log("modificar: recibida imagen1");
+          console.log("modificar: recibido video1");
           modificarAlmacenarElementoMultimedia1(res,files,fields,poi,dirname,randomName,files.filetoupload1.path,files.filetoupload1.name,'video',fields.transparent1,id,nombre,id_poi)
         }
       }
       else{
         //no hay contenido aumentado
         console.log("no hay contenido aumentado");
-        eliminarElementoMultimedia(fields.old_file1,fields.old_field1,1);
-        eliminarElementoMultimedia(fields.old_file2,fields.old_field2,2);
-        eliminarElementoMultimedia(fields.old_file3,fields.old_field3,3);
+        eliminarElementoMultimedia(dirname,fields.old_file1,1);
+        eliminarElementoMultimedia(dirname,fields.old_file1,2);
+        eliminarElementoMultimedia(dirname,fields.old_file1,3);
         poi.distancia = null
         poi.elemento1 = null
         poi.archivo1 = null
