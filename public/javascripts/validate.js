@@ -17,6 +17,7 @@ var armissing_error = "Debes añadir al menos una imagen o un video si quieres q
 var length_error = "El texto introducido es demasiado largo el numero maximo de caracteres es: "
 var ardistance_error = "Debes introducir la distancia minima para visualizar la AR"
 var tamanio_error= "Debes indicar el tamaño del objeto aumentado"
+var posicion_error= "Debes indicar un posicionamiento para el elemento AR"
 
 validate = function(regexp, cadena) {
   var result = regexp.test(cadena);
@@ -232,6 +233,17 @@ $("input[name='optradio']").on('change', function() {
   checkRadioButtonAr();
 });
 
+$("input[name='optradio_position2']").on('change', function() {
+  $('#positionelement2-group').removeClass("has-error");
+  $('#helpBlockPositionelement2').hide();
+});
+$("input[name='optradio_position3']").on('change', function() {
+  $('#positionelement3-group').removeClass("has-error");
+  $('#helpBlockPositionelement3').hide();
+});
+
+
+
 function checkRadioButtonElement(clase, bloqueError, elemento, transparente){
   var option = document.querySelector('input[name = "'+ elemento +'"]:checked').value;
   console.log("seleccionado: " + option);
@@ -347,14 +359,34 @@ function validarPOI(){
                                         if(element3=="imagen"){
                                           if(validarImagen(file3,'#filearelement3-group','helpBlockArfile3')){
                                             console.log("imagen 3 validada");
-                                            return true;
+                                            if(validarElemento("optradio_position2")){
+                                              if(validarElemento("optradio_position3")){
+                                                return true;
+                                              }else{
+                                                showMessage(posicion_error,'#positionelement3-group','helpBlockPositionelement3')
+                                                return false;
+                                              }
+                                            }else{
+                                              showMessage(posicion_error,'#positionelement2-group','helpBlockPositionelement2')
+                                              return false;
+                                            }
                                           }else{
                                             return false
                                           }
                                         }else if(element3=="video"){
                                           if(validarVideo(file3,'#filearelement3-group','helpBlockArfile3')){
                                             console.log("video 3 validado");
-                                            return true;
+                                            if(validarElemento("optradio_position2")){
+                                              if(validarElemento("optradio_position3")){
+                                                return true;
+                                              }else{
+                                                showMessage(posicion_error,'#positionelement3-group','helpBlockPositionelement3')
+                                                return false;
+                                              }
+                                            }else{
+                                              showMessage(posicion_error,'#positionelement2-group','helpBlockPositionelement2')
+                                              return false;
+                                            }
                                           }else{
                                             return false;
                                           }
@@ -364,7 +396,12 @@ function validarPOI(){
                                       }
                                     }else{
                                       console.log("no hemos introducido elemento 3");
-                                      return true;
+                                      if(validarElemento("optradio_position2")){
+                                        return true;
+                                      }else{
+                                        showMessage(posicion_error,'#positionelement2-group','helpBlockPositionelement2')
+                                        return false;
+                                      }
                                     }
                                   }else{
                                     return false
@@ -380,14 +417,34 @@ function validarPOI(){
                                         if(element3=="imagen"){
                                           if(validarImagen(file3,'#filearelement3-group','helpBlockArfile3')){
                                             console.log("imagen 3 validada");
-                                            return true
+                                            if(validarElemento("optradio_position2")){
+                                              if(validarElemento("optradio_position3")){
+                                                return true;
+                                              }else{
+                                                showMessage(posicion_error,'#positionelement3-group','helpBlockPositionelement3')
+                                                return false;
+                                              }
+                                            }else{
+                                              showMessage(posicion_error,'#positionelement2-group','helpBlockPositionelement2')
+                                              return false;
+                                            }
                                           }else{
                                             return false
                                           }
                                         }else if(element3=="video"){
                                           if(validarVideo(file3,'#filearelement3-group','helpBlockArfile3')){
                                             console.log("video 3 validado");
-                                            return true
+                                            if(validarElemento("optradio_position2")){
+                                              if(validarElemento("optradio_position3")){
+                                                return true;
+                                              }else{
+                                                showMessage(posicion_error,'#positionelement3-group','helpBlockPositionelement3')
+                                                return false;
+                                              }
+                                            }else{
+                                              showMessage(posicion_error,'#positionelement2-group','helpBlockPositionelement2')
+                                              return false;
+                                            }
                                           }else{
                                             return false;
                                           }
@@ -397,7 +454,12 @@ function validarPOI(){
                                       }
                                     }else{
                                       console.log("no hemos introducido elemento 3");
-                                      return true;
+                                      if(validarElemento("optradio_position2")){
+                                        return true;
+                                      }else{
+                                        showMessage(posicion_error,'#positionelement2-group','helpBlockPositionelement2')
+                                        return false;
+                                      }
                                     }
                                   }else{
                                     return false;
@@ -432,14 +494,34 @@ function validarPOI(){
                                         if(element3=="imagen"){
                                           if(validarImagen(file3,'#filearelement3-group','helpBlockArfile3')){
                                             console.log("imagen 3 validada");
-                                            return true
+                                            if(validarElemento("optradio_position2")){
+                                              if(validarElemento("optradio_position3")){
+                                                return true;
+                                              }else{
+                                                showMessage(posicion_error,'#positionelement3-group','helpBlockPositionelement3')
+                                                return false;
+                                              }
+                                            }else{
+                                              showMessage(posicion_error,'#positionelement2-group','helpBlockPositionelement2')
+                                              return false;
+                                            }
                                           }else{
                                             return false
                                           }
                                         }else if(element3=="video"){
                                           if(validarVideo(file3,'#filearelement3-group','helpBlockArfile3')){
                                             console.log("video 3 validado");
-                                            return true;
+                                            if(validarElemento("optradio_position2")){
+                                              if(validarElemento("optradio_position3")){
+                                                return true;
+                                              }else{
+                                                showMessage(posicion_error,'#positionelement3-group','helpBlockPositionelement3')
+                                                return false;
+                                              }
+                                            }else{
+                                              showMessage(posicion_error,'#positionelement2-group','helpBlockPositionelement2')
+                                              return false;
+                                            }
                                           }else{
                                             return false;
                                           }
@@ -449,7 +531,12 @@ function validarPOI(){
                                       }
                                     }else{
                                       console.log("no hemos introducido elemento 3");
-                                      return true;
+                                      if(validarElemento("optradio_position2")){
+                                        return true
+                                      }else{
+                                        showMessage(posicion_error,'#positionelement2-group','helpBlockPositionelement2')
+                                        return false;
+                                      }
                                     }
                                   }else{
                                     return false
@@ -466,14 +553,34 @@ function validarPOI(){
                                         if(element3=="imagen"){
                                           if(validarImagen(file3,'#filearelement3-group','helpBlockArfile3')){
                                             console.log("imagen 3 validada");
-                                            return true;
+                                            if(validarElemento("optradio_position2")){
+                                              if(validarElemento("optradio_position3")){
+                                                return true;
+                                              }else{
+                                                showMessage(posicion_error,'#positionelement3-group','helpBlockPositionelement3')
+                                                return false;
+                                              }
+                                            }else{
+                                              showMessage(posicion_error,'#positionelement2-group','helpBlockPositionelement2')
+                                              return false;
+                                            }
                                           }else{
                                             return false
                                           }
                                         }else if(element3=="video"){
                                           if(validarVideo(file3,'#filearelement3-group','helpBlockArfile3')){
                                             console.log("video 3 validado");
-                                            return true;
+                                            if(validarElemento("optradio_position2")){
+                                              if(validarElemento("optradio_position3")){
+                                                return true;
+                                              }else{
+                                                showMessage(posicion_error,'#positionelement3-group','helpBlockPositionelement3')
+                                                return false;
+                                              }
+                                            }else{
+                                              showMessage(posicion_error,'#positionelement2-group','helpBlockPositionelement2')
+                                              return false;
+                                            }
                                           }else{
                                             return false;
                                           }
@@ -483,7 +590,12 @@ function validarPOI(){
                                       }
                                     }else{
                                       console.log("no hemos introducido elemento 3");
-                                      return true;
+                                      if(validarElemento("optradio_position2")){
+                                        return true
+                                      }else{
+                                        showMessage(posicion_error,'#positionelement2-group','helpBlockPositionelement2')
+                                        return false;
+                                      }
                                     }
                                   }else{
                                     return false;
@@ -638,7 +750,17 @@ function validarModificarPOI(){
                                     if(element3 =='imagen'){
                                       if(validarModificarImagen(file3,oldFile3,'#filearelement3-group','helpBlockArfile3')){
                                         console.log("imagen 3 validada");
-                                        return true;
+                                        if(validarElemento("optradio_position2")){
+                                          if(validarElemento("optradio_position3")){
+                                            return true;
+                                          }else{
+                                            showMessage(posicion_error,'#positionelement3-group','helpBlockPositionelement3')
+                                            return false;
+                                          }
+                                        }else{
+                                          showMessage(posicion_error,'#positionelement2-group','helpBlockPositionelement2')
+                                          return false;
+                                        }
                                       }
                                       else{
                                         return false;
@@ -647,7 +769,17 @@ function validarModificarPOI(){
                                     else if(element3 =='video'){
                                       if(validarModificarVideo(file3,oldFile3,'#filearelement3-group','helpBlockArfile3')){
                                         console.log("video 3 validado");
-                                        return true
+                                        if(validarElemento("optradio_position2")){
+                                          if(validarElemento("optradio_position3")){
+                                            return true;
+                                          }else{
+                                            showMessage(posicion_error,'#positionelement3-group','helpBlockPositionelement3')
+                                            return false;
+                                          }
+                                        }else{
+                                          showMessage(posicion_error,'#positionelement2-group','helpBlockPositionelement2')
+                                          return false;
+                                        }
                                       }
                                       else{
                                         return false;
@@ -660,8 +792,13 @@ function validarModificarPOI(){
                                   }
                                 }
                                 else{
-                                  console.log("no hemos añadido elemento3");
-                                  return true;
+                                  console.log("no hemos añadido elemento 3");
+                                  if(validarElemento("optradio_position2")){
+                                    return true
+                                  }else{
+                                    showMessage(posicion_error,'#positionelement2-group','helpBlockPositionelement2')
+                                    return false;
+                                  }
                                 }
                               }
                               else{
@@ -681,7 +818,17 @@ function validarModificarPOI(){
                                     if(element3 =='imagen'){
                                       if(validarModificarImagen(file3,oldFile3,'#filearelement3-group','helpBlockArfile3')){
                                         console.log("imagen 3 validada");
-                                        return true;
+                                        if(validarElemento("optradio_position2")){
+                                          if(validarElemento("optradio_position3")){
+                                            return true;
+                                          }else{
+                                            showMessage(posicion_error,'#positionelement3-group','helpBlockPositionelement3')
+                                            return false;
+                                          }
+                                        }else{
+                                          showMessage(posicion_error,'#positionelement2-group','helpBlockPositionelement2')
+                                          return false;
+                                        }
                                       }
                                       else{
                                         return false;
@@ -690,7 +837,17 @@ function validarModificarPOI(){
                                     else if(element3 =='video'){
                                       if(validarModificarVideo(file3,oldFile3,'#filearelement3-group','helpBlockArfile3')){
                                         console.log("video 3 validado");
-                                        return true;
+                                        if(validarElemento("optradio_position2")){
+                                          if(validarElemento("optradio_position3")){
+                                            return true;
+                                          }else{
+                                            showMessage(posicion_error,'#positionelement3-group','helpBlockPositionelement3')
+                                            return false;
+                                          }
+                                        }else{
+                                          showMessage(posicion_error,'#positionelement2-group','helpBlockPositionelement2')
+                                          return false;
+                                        }
                                       }
                                       else{
                                         return false;
@@ -704,7 +861,12 @@ function validarModificarPOI(){
                                 }
                                 else{
                                   console.log("no hemos añadido elemento3");
-                                  return true;
+                                  if(validarElemento("optradio_position2")){
+                                    return true;
+                                  }else{
+                                    showMessage(posicion_error,'#positionelement2-group','helpBlockPositionelement2')
+                                    return false;
+                                  }
                                 }
                               }
                               else{
@@ -747,7 +909,17 @@ function validarModificarPOI(){
                                     if(element3 =='imagen'){
                                       if(validarModificarImagen(file3,oldFile3,'#filearelement3-group','helpBlockArfile3')){
                                         console.log("imagen 3 validada");
-                                        return true;
+                                        if(validarElemento("optradio_position2")){
+                                          if(validarElemento("optradio_position3")){
+                                            return true;
+                                          }else{
+                                            showMessage(posicion_error,'#positionelement3-group','helpBlockPositionelement3')
+                                            return false;
+                                          }
+                                        }else{
+                                          showMessage(posicion_error,'#positionelement2-group','helpBlockPositionelement2')
+                                          return false;
+                                        }
                                       }
                                       else{
                                         return false;
@@ -756,7 +928,17 @@ function validarModificarPOI(){
                                     else if(element3 =='video'){
                                       if(validarModificarVideo(file3,oldFile3,'#filearelement3-group','helpBlockArfile3')){
                                         console.log("video 3 validado");
-                                        return true;
+                                        if(validarElemento("optradio_position2")){
+                                          if(validarElemento("optradio_position3")){
+                                            return true;
+                                          }else{
+                                            showMessage(posicion_error,'#positionelement3-group','helpBlockPositionelement3')
+                                            return false;
+                                          }
+                                        }else{
+                                          showMessage(posicion_error,'#positionelement2-group','helpBlockPositionelement2')
+                                          return false;
+                                        }
                                       }
                                       else{
                                         return false;
@@ -769,8 +951,13 @@ function validarModificarPOI(){
                                   }
                                 }
                                 else{
-                                  console.log("no hemos añadido elemento3");
-                                  return true;
+                                  console.log("no hemos añadido elemento 3");
+                                  if(validarElemento("optradio_position2")){
+                                    return true
+                                  }else{
+                                    showMessage(posicion_error,'#positionelement2-group','helpBlockPositionelement2')
+                                    return false;
+                                  }
                                 }
                               }
                               else{
@@ -789,7 +976,17 @@ function validarModificarPOI(){
                                     if(element3 =='imagen'){
                                       if(validarModificarImagen(file3,oldFile3,'#filearelement3-group','helpBlockArfile3')){
                                         console.log("imagen 3 validada");
-                                        return true;
+                                        if(validarElemento("optradio_position2")){
+                                          if(validarElemento("optradio_position3")){
+                                            return true;
+                                          }else{
+                                            showMessage(posicion_error,'#positionelement3-group','helpBlockPositionelement3')
+                                            return false;
+                                          }
+                                        }else{
+                                          showMessage(posicion_error,'#positionelement2-group','helpBlockPositionelement2')
+                                          return false;
+                                        }
                                       }
                                       else{
                                         return false;
@@ -798,7 +995,17 @@ function validarModificarPOI(){
                                     else if(element3 =='video'){
                                       if(validarModificarVideo(file3,oldFile3,'#filearelement3-group','helpBlockArfile3')){
                                         console.log("video 3 validado");
-                                        return true;
+                                        if(validarElemento("optradio_position2")){
+                                          if(validarElemento("optradio_position3")){
+                                            return true;
+                                          }else{
+                                            showMessage(posicion_error,'#positionelement3-group','helpBlockPositionelement3')
+                                            return false;
+                                          }
+                                        }else{
+                                          showMessage(posicion_error,'#positionelement2-group','helpBlockPositionelement2')
+                                          return false;
+                                        }
                                       }
                                       else{
                                         return false;
@@ -812,7 +1019,12 @@ function validarModificarPOI(){
                                 }
                                 else{
                                   console.log("no hemos añadido elemento3");
-                                  return true;
+                                  if(validarElemento("optradio_position2")){
+                                    return true
+                                  }else{
+                                    showMessage(posicion_error,'#positionelement2-group','helpBlockPositionelement2')
+                                    return false;
+                                  }
                                 }
                               }
                               else{
